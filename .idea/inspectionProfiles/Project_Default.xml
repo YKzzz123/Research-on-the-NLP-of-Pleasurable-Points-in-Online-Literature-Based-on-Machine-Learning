@@ -1,0 +1,33 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="9">
+            <item index="0" class="java.lang.String" itemvalue="pandas" />
+            <item index="1" class="java.lang.String" itemvalue="pyreadr" />
+            <item index="2" class="java.lang.String" itemvalue="et-xmlfile" />
+            <item index="3" class="java.lang.String" itemvalue="numpy" />
+            <item index="4" class="java.lang.String" itemvalue="pytz" />
+            <item index="5" class="java.lang.String" itemvalue="openpyxl" />
+            <item index="6" class="java.lang.String" itemvalue="pillow" />
+            <item index="7" class="java.lang.String" itemvalue="torchstat" />
+            <item index="8" class="java.lang.String" itemvalue="pyqt5" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="ultralytics.utils.torch_utils.de_parallel" />
+          <option value="test_1.main_system.vision_detector" />
+          <option value="test_1.main_system.voice_handler" />
+          <option value="test_1.main_system.obstacl" />
+          <option value="test_1.main_system.obstacle_detector" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

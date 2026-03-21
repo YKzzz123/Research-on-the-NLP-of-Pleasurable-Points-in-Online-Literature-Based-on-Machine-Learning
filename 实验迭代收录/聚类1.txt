@@ -1,0 +1,30 @@
+
+(comp5572) PS C:\Users\16417\PycharmProjects\comp5572> python clustering.py
+C:\Anaconda3\envs\comp5572\lib\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.                                                                 
+  import pkg_resources
+🔍 正在读取数据...
+✂️ 正在进行【情绪导向】的深度分词过滤...
+Building prefix dict from the default dictionary ...
+Loading model from cache C:\Users\16417\AppData\Local\Temp\jieba.cache
+Loading model cost 1.718 seconds.
+Prefix dict has been built successfully.
+🧮 正在计算 TF-IDF 权重矩阵 (聚焦动词与形容词)...
+🤖 正在执行 K-Means 聚类...
+
+🎉 === 聚焦情绪与动作的套路揭秘 === 🎉
+
+🔥 【动作/情绪流派 1】的核心词:
+直接  |  爆发  |  宛如  |  化为  |  暴射  |  顿时  |  只见  |  恐怖  |  磅礴  |  开来  |  响 彻  |  起来  |  狠狠  |  猛然  |  剧烈                                                       
+------------------------------------------------------------
+🔥 【动作/情绪流派 2】的核心词:
+恐怕  |  就算  |  却是  |  不会  |  可能  |  毕竟  |  竟然  |  真的  |  真是  |  的确  |  应 该  |  出手  |  想要  |  有着  |  面对                                                       
+------------------------------------------------------------
+🔥 【动作/情绪流派 3】的核心词:
+有着  |  出来  |  只见  |  巨大  |  散发  |  起来  |  波动  |  渐渐  |  却是  |  响起  |  涌 现  |  仿佛  |  形成  |  爆发  |  正是                                                       
+------------------------------------------------------------
+🔥 【动作/情绪流派 4】的核心词:
+便是  |  见到  |  清淑  |  起来  |  直接  |  最终  |  似乎  |  真是  |  变得  |  迅速  |  想 要  |  微微  |  有着  |  离开  |  终于                                                       
+------------------------------------------------------------
+🔥 【动作/情绪流派 4】的核心词:
+便是  |  见到  |  清淑  |  起来  |  直接  |  最终  |  似乎  |  真是  |  变得  |  迅速  |  想 要  |  微微  |  有着  |  离开  |  终于                                                       
+------------------------------------------------------------

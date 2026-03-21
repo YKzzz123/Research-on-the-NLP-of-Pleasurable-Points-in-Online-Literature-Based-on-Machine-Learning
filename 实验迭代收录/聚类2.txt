@@ -1,0 +1,38 @@
+
+(comp5572) PS C:\Users\16417\PycharmProjects\comp5572> python clustering2.py
+C:\Anaconda3\envs\comp5572\lib\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.                                                                 
+  import pkg_resources
+🚀 开始执行：终极纯净版聚类分析...
+✂️ 正在进行最严格的【动词/形容词】分词过滤...
+Building prefix dict from the default dictionary ...
+Loading model from cache C:\Users\16417\AppData\Local\Temp\jieba.cache
+Loading model cost 1.714 seconds.
+Prefix dict has been built successfully.
+🧮 正在计算 TF-IDF 权重矩阵...
+🤖 正在执行 K-Means 聚类 (设定分为 4 类)...
+
+🎉 === 剔除噪音后的纯净套路揭秘 === 🎉
+
+🔥 【纯净情绪流派 1】的核心词:
+恐怕  |  极为  |  准备  |  看来  |  来到  |  必然  |  进入  |  遇见  |  只能  |  还有  |  同 样  |  贯穿                                                                                  
+------------------------------------------------------------
+🔥 【纯净情绪流派 2】的核心词:
+清淑  |  突破  |  极限  |  竟然  |  恐怕  |  失败  |  同样  |  已经  |  成功  |  无疑  |  忍 不住  |  震撼                                                                                
+------------------------------------------------------------
+🔥 【纯净情绪流派 3】的核心词:
+爆发  |  恐怖  |  开来  |  暴射  |  波动  |  磅礴  |  巨大  |  剧烈  |  响彻  |  忽然  |  震 荡  |  猛然                                                                                  
+------------------------------------------------------------
+🔥 【纯净情绪流派 4】的核心词:
+竟然  |  已经  |  攻击  |  淘汰  |  联手  |  不小  |  想到  |  恐怕  |  其实  |  必然  |  震 爆发  |  恐怖  |  开来  |  暴射  |  波动  |  磅礴  |  巨大  |  剧烈  |  响彻  |  忽然  |  震 荡  |  猛然                                                                                  
+------------------------------------------------------------
+爆发  |  恐怖  |  开来  |  暴射  |  波动  |  磅礴  |  巨大  |  剧烈  |  响彻  |  忽然  |  震 荡  |  猛然                                                                  
+
+最终词汇选用：
+climax_keywords = [
+    # 旁观者情绪反应（最核心的爽点刻度）
+    '震撼', '竟然', '忍不住', '可怕', '恐怖', 
+    # 动作与能量爆发
+    '爆发', '突破', '极限', '响彻', '暴射', '磅礴',
+    # 结果反转
+    '淘汰', '成功', '贯穿'
+]
