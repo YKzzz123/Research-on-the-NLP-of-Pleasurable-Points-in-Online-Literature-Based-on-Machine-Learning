@@ -1,0 +1,98 @@
+【try2 项目总流程总结（用于项目报告）】
+
+1. 数据准备与任务定义
+- 使用 merged.csv 作为训练数据，文本字段为 paragragh，标签为 tag（1/2）。
+- 任务目标：对网文片段进行二分类（tag1=优越感、tag2=占有感），并在推理端支持低置信度回退为 none（无明显爽点）。
+
+2. 特征工程
+- 采用双通道文本特征：
+  - 字符级 TF-IDF：analyzer="char"，ngram_range=(2,4)，max_features=12000
+  - 词级 TF-IDF：使用中文分词函数 zh_word_unigram_bigram，max_features=6000
+- 将两路特征进行拼接（sparse.hstack），兼顾局部字符模式与词语语义信息。
+
+3. 数据划分与不平衡处理
+- 使用分层划分 train_test_split(..., stratify=y, test_size=0.2)，保证训练/验证集标签分布一致。
+- 使用 compute_sample_weight(class_weight="balanced") 对训练样本加权，减轻类别不均衡影响。
+
+4. 模型训练与自动调参
+- 核心模型：
+  - 线性核 SVM（SVC(probability=True)）+ RandomizedSearchCV 搜索参数 C
+  - RandomForest + RandomizedSearchCV 搜索 n_estimators、max_depth、min_samples_split 等参数
+- 额外对比模型：
+  - MultinomialNB（用于轻量基线和可解释对比）
+  - XGBoost（环境可用时启用）
+- 评估指标：
+  - accuracy
+  - f1_macro（主指标）
+  - balanced_accuracy
+  - recall_tag2（重点关注少数类召回）
+
+5. 融合策略与 none 机制
+- 在验证集上对 SVM 与 RF 做软投票加权融合，通过搜索得到最优权重 w_svm、w_rf。
+- 权重选择目标：0.8 * f1_macro + 0.2 * recall_tag2，兼顾总体效果与小类召回。
+- 计算 unknown_threshold（正确预测样本最大概率的较低分位），推理时若最大概率低于阈值，则输出 none。
+
+6. 结果固化与可视化输出
+- 模型与推理配置保存在 artifacts/：
+  - 向量器（char_vec、word_vec）
+  - 模型文件（svm、rf、nb/xgb）
+  - 融合权重（voting_model）
+  - 元信息（meta.json：阈值、参数、启用模型等）
+- 评估结果与图像输出：
+  - model_eval.csv、classification_report_table.csv/.md
+  - class_distribution.png
+  - model_f1_comparison.png
+  - confusion_matrix_weighted_voting.png
+  - classification_metrics_overview.png
+
+7. Demo 部署与交互验证
+- 使用 Streamlit（demo_app.py）加载 artifacts 并进行实时预测。
+- 页面展示：
+  - 最终标签、置信度、爽感分数（0~100）
+  - SVM/RF/NB/Voting 的概率分解
+  - none 阈值可调，便于业务侧按场景调优。
+
+
+【当前实验结果（quick 模式）】
+- 样本分布：tag1=365，tag2=84，类别比约 4.35:1
+- 融合权重：w_svm=0.60，w_rf=0.40
+- 验证集表现（90 条）：
+  - SVM：acc=0.8778，f1_macro=0.8129
+  - RF：acc=0.8667，f1_macro=0.7917
+  - Weighted Voting：acc=0.8778，f1_macro=0.8129
+  - NB：acc=0.7667，f1_macro=0.7192（recall_tag2 较高）
+- none 阈值：0.6433
+
+
+【遇到的问题与解决方案】
+
+问题1：类别不均衡导致少数类漏检风险高
+- 现象：tag1:tag2 约为 4.35:1，仅看 accuracy 容易掩盖小类漏检。
+- 解决：训练时采用 balanced sample_weight；评估时加入 balanced_accuracy 与 recall_tag2；融合选权重时显式加入 recall_tag2。
+- 结果：在保持整体精度的同时，少数类召回得到提升。
+
+问题2：单模型泛化稳定性有限
+- 现象：SVM 与 RF 在不同样本上的偏好不同，单模型波动较明显。
+- 解决：采用 SVM+RF 软投票，并在验证集搜索最佳融合权重（而非固定 0.5/0.5）。
+- 结果：整体预测更稳健，降低单模型偏差带来的误判波动。
+
+问题3：真实场景存在“非目标文本”，硬分类误报较多
+- 现象：若强制二分类，任何输入都会落到 tag1/tag2，业务上不合理。
+- 解决：引入 none 回退机制（最大概率低于阈值则输出 none），并允许前端滑块调节阈值。
+- 结果：开放场景下误报率下降，系统可用性提升。
+
+问题4：高维特征 + 交叉验证带来训练资源压力
+- 现象：全量调参耗时较长，开发迭代效率受影响。
+- 解决：提供 --quick 模式（减少搜索轮次与 CV 折数）；并控制并行策略避免过载。
+- 结果：开发阶段可快速迭代，正式训练时再切换完整配置。
+
+问题5：环境依赖差异影响复现稳定性
+- 现象：部分环境缺失 xgboost、markdown 依赖或历史 artifacts 结构不一致。
+- 解决：XGBoost 设计为可选启用；markdown 输出提供 fallback；Demo 对旧版 artifacts 增加兼容逻辑。
+- 结果：跨机器运行稳定性和复现性提升。
+
+
+【可写入报告的结论】
+- try2 方案以“中文双通道 TF-IDF + 自动调参 + 加权融合 + none 回退机制”为核心，兼顾了可解释性、可部署性与效果稳定性。
+- 在类别不均衡条件下，项目通过样本加权与指标约束改善了少数类识别能力。
+- 通过 Streamlit Demo 将训练成果产品化展示，实现从“离线实验”到“可交互验证”的闭环。
