@@ -1,0 +1,36 @@
+{
+  "labels": {
+    "1": "tag1",
+    "2": "tag2",
+    "0": "none"
+  },
+  "unknown_threshold": 0.6433083843921977,
+  "n_train": 359,
+  "n_valid": 90,
+  "class_distribution_full": {
+    "1": 365,
+    "2": 84
+  },
+  "best_params": {
+    "svm": {
+      "C": 0.31489116479568624
+    },
+    "rf": {
+      "n_estimators": 300,
+      "min_samples_split": 5,
+      "min_samples_leaf": 4,
+      "max_features": 0.5,
+      "max_depth": 40
+    }
+  },
+  "vote_weights": {
+    "w_svm": 0.6000000000000001,
+    "w_rf": 0.3999999999999999
+  },
+  "enabled_models": [
+    "svm",
+    "rf",
+    "weighted_voting",
+    "nb"
+  ]
+}

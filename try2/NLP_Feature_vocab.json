@@ -1,0 +1,906 @@
+{
+  "char_tfidf": [
+    {
+      "col": "char_tfidf_0",
+      "ngram": "\n“"
+    },
+    {
+      "col": "char_tfidf_1",
+      "ngram": " “"
+    },
+    {
+      "col": "char_tfidf_2",
+      "ngram": "”\n"
+    },
+    {
+      "col": "char_tfidf_3",
+      "ngram": "” "
+    },
+    {
+      "col": "char_tfidf_4",
+      "ngram": "…”"
+    },
+    {
+      "col": "char_tfidf_5",
+      "ngram": "……"
+    },
+    {
+      "col": "char_tfidf_6",
+      "ngram": "。\n"
+    },
+    {
+      "col": "char_tfidf_7",
+      "ngram": "。\n“"
+    },
+    {
+      "col": "char_tfidf_8",
+      "ngram": "。 "
+    },
+    {
+      "col": "char_tfidf_9",
+      "ngram": "。 “"
+    },
+    {
+      "col": "char_tfidf_10",
+      "ngram": "。”"
+    },
+    {
+      "col": "char_tfidf_11",
+      "ngram": "一个"
+    },
+    {
+      "col": "char_tfidf_12",
+      "ngram": "一般"
+    },
+    {
+      "col": "char_tfidf_13",
+      "ngram": "一道"
+    },
+    {
+      "col": "char_tfidf_14",
+      "ngram": "上，"
+    },
+    {
+      "col": "char_tfidf_15",
+      "ngram": "下来"
+    },
+    {
+      "col": "char_tfidf_16",
+      "ngram": "下，"
+    },
+    {
+      "col": "char_tfidf_17",
+      "ngram": "不过"
+    },
+    {
+      "col": "char_tfidf_18",
+      "ngram": "中的"
+    },
+    {
+      "col": "char_tfidf_19",
+      "ngram": "中，"
+    },
+    {
+      "col": "char_tfidf_20",
+      "ngram": "之上"
+    },
+    {
+      "col": "char_tfidf_21",
+      "ngram": "之中"
+    },
+    {
+      "col": "char_tfidf_22",
+      "ngram": "也是"
+    },
+    {
+      "col": "char_tfidf_23",
+      "ngram": "了一"
+    },
+    {
+      "col": "char_tfidf_24",
+      "ngram": "他们"
+    },
+    {
+      "col": "char_tfidf_25",
+      "ngram": "他的"
+    },
+    {
+      "col": "char_tfidf_26",
+      "ngram": "体内"
+    },
+    {
+      "col": "char_tfidf_27",
+      "ngram": "便是"
+    },
+    {
+      "col": "char_tfidf_28",
+      "ngram": "出来"
+    },
+    {
+      "col": "char_tfidf_29",
+      "ngram": "出现"
+    },
+    {
+      "col": "char_tfidf_30",
+      "ngram": "出，"
+    },
+    {
+      "col": "char_tfidf_31",
+      "ngram": "到了"
+    },
+    {
+      "col": "char_tfidf_32",
+      "ngram": "到，"
+    },
+    {
+      "col": "char_tfidf_33",
+      "ngram": "力量"
+    },
+    {
+      "col": "char_tfidf_34",
+      "ngram": "力，"
+    },
+    {
+      "col": "char_tfidf_35",
+      "ngram": "动，"
+    },
+    {
+      "col": "char_tfidf_36",
+      "ngram": "却是"
+    },
+    {
+      "col": "char_tfidf_37",
+      "ngram": "后，"
+    },
+    {
+      "col": "char_tfidf_38",
+      "ngram": "周元"
+    },
+    {
+      "col": "char_tfidf_39",
+      "ngram": "因为"
+    },
+    {
+      "col": "char_tfidf_40",
+      "ngram": "在了"
+    },
+    {
+      "col": "char_tfidf_41",
+      "ngram": "在此"
+    },
+    {
+      "col": "char_tfidf_42",
+      "ngram": "在此时"
+    },
+    {
+      "col": "char_tfidf_43",
+      "ngram": "在这"
+    },
+    {
+      "col": "char_tfidf_44",
+      "ngram": "在那"
+    },
+    {
+      "col": "char_tfidf_45",
+      "ngram": "声，"
+    },
+    {
+      "col": "char_tfidf_46",
+      "ngram": "大的"
+    },
+    {
+      "col": "char_tfidf_47",
+      "ngram": "头，"
+    },
+    {
+      "col": "char_tfidf_48",
+      "ngram": "无数"
+    },
+    {
+      "col": "char_tfidf_49",
+      "ngram": "时，"
+    },
+    {
+      "col": "char_tfidf_50",
+      "ngram": "是一"
+    },
+    {
+      "col": "char_tfidf_51",
+      "ngram": "是在"
+    },
+    {
+      "col": "char_tfidf_52",
+      "ngram": "是在此"
+    },
+    {
+      "col": "char_tfidf_53",
+      "ngram": "是有"
+    },
+    {
+      "col": "char_tfidf_54",
+      "ngram": "最后"
+    },
+    {
+      "col": "char_tfidf_55",
+      "ngram": "有些"
+    },
+    {
+      "col": "char_tfidf_56",
+      "ngram": "有着"
+    },
+    {
+      "col": "char_tfidf_57",
+      "ngram": "望着"
+    },
+    {
+      "col": "char_tfidf_58",
+      "ngram": "李洛"
+    },
+    {
+      "col": "char_tfidf_59",
+      "ngram": "来。"
+    },
+    {
+      "col": "char_tfidf_60",
+      "ngram": "来的"
+    },
+    {
+      "col": "char_tfidf_61",
+      "ngram": "来，"
+    },
+    {
+      "col": "char_tfidf_62",
+      "ngram": "林动"
+    },
+    {
+      "col": "char_tfidf_63",
+      "ngram": "此时"
+    },
+    {
+      "col": "char_tfidf_64",
+      "ngram": "气，"
+    },
+    {
+      "col": "char_tfidf_65",
+      "ngram": "没有"
+    },
+    {
+      "col": "char_tfidf_66",
+      "ngram": "源气"
+    },
+    {
+      "col": "char_tfidf_67",
+      "ngram": "然后"
+    },
+    {
+      "col": "char_tfidf_68",
+      "ngram": "牧尘"
+    },
+    {
+      "col": "char_tfidf_69",
+      "ngram": "犹如"
+    },
+    {
+      "col": "char_tfidf_70",
+      "ngram": "现在"
+    },
+    {
+      "col": "char_tfidf_71",
+      "ngram": "的一"
+    },
+    {
+      "col": "char_tfidf_72",
+      "ngram": "的身"
+    },
+    {
+      "col": "char_tfidf_73",
+      "ngram": "目光"
+    },
+    {
+      "col": "char_tfidf_74",
+      "ngram": "直接"
+    },
+    {
+      "col": "char_tfidf_75",
+      "ngram": "眼中"
+    },
+    {
+      "col": "char_tfidf_76",
+      "ngram": "着那"
+    },
+    {
+      "col": "char_tfidf_77",
+      "ngram": "竟然"
+    },
+    {
+      "col": "char_tfidf_78",
+      "ngram": "缓缓"
+    },
+    {
+      "col": "char_tfidf_79",
+      "ngram": "而出"
+    },
+    {
+      "col": "char_tfidf_80",
+      "ngram": "而出，"
+    },
+    {
+      "col": "char_tfidf_81",
+      "ngram": "能够"
+    },
+    {
+      "col": "char_tfidf_82",
+      "ngram": "般的"
+    },
+    {
+      "col": "char_tfidf_83",
+      "ngram": "萧炎"
+    },
+    {
+      "col": "char_tfidf_84",
+      "ngram": "见到"
+    },
+    {
+      "col": "char_tfidf_85",
+      "ngram": "起来"
+    },
+    {
+      "col": "char_tfidf_86",
+      "ngram": "身体"
+    },
+    {
+      "col": "char_tfidf_87",
+      "ngram": "身影"
+    },
+    {
+      "col": "char_tfidf_88",
+      "ngram": "这一"
+    },
+    {
+      "col": "char_tfidf_89",
+      "ngram": "这种"
+    },
+    {
+      "col": "char_tfidf_90",
+      "ngram": "那一"
+    },
+    {
+      "col": "char_tfidf_91",
+      "ngram": "都是"
+    },
+    {
+      "col": "char_tfidf_92",
+      "ngram": "间，"
+    },
+    {
+      "col": "char_tfidf_93",
+      "ngram": "面色"
+    },
+    {
+      "col": "char_tfidf_94",
+      "ngram": "顿时"
+    },
+    {
+      "col": "char_tfidf_95",
+      "ngram": "！\n"
+    },
+    {
+      "col": "char_tfidf_96",
+      "ngram": "！ "
+    },
+    {
+      "col": "char_tfidf_97",
+      "ngram": "！”"
+    },
+    {
+      "col": "char_tfidf_98",
+      "ngram": "！”\n"
+    },
+    {
+      "col": "char_tfidf_99",
+      "ngram": "！” "
+    },
+    {
+      "col": "char_tfidf_100",
+      "ngram": "，一"
+    },
+    {
+      "col": "char_tfidf_101",
+      "ngram": "，不"
+    },
+    {
+      "col": "char_tfidf_102",
+      "ngram": "，也"
+    },
+    {
+      "col": "char_tfidf_103",
+      "ngram": "，也是"
+    },
+    {
+      "col": "char_tfidf_104",
+      "ngram": "，他"
+    },
+    {
+      "col": "char_tfidf_105",
+      "ngram": "，但"
+    },
+    {
+      "col": "char_tfidf_106",
+      "ngram": "，便"
+    },
+    {
+      "col": "char_tfidf_107",
+      "ngram": "，便是"
+    },
+    {
+      "col": "char_tfidf_108",
+      "ngram": "，却"
+    },
+    {
+      "col": "char_tfidf_109",
+      "ngram": "，却是"
+    },
+    {
+      "col": "char_tfidf_110",
+      "ngram": "，只"
+    },
+    {
+      "col": "char_tfidf_111",
+      "ngram": "，在"
+    },
+    {
+      "col": "char_tfidf_112",
+      "ngram": "，就"
+    },
+    {
+      "col": "char_tfidf_113",
+      "ngram": "，最"
+    },
+    {
+      "col": "char_tfidf_114",
+      "ngram": "，然"
+    },
+    {
+      "col": "char_tfidf_115",
+      "ngram": "，然后"
+    },
+    {
+      "col": "char_tfidf_116",
+      "ngram": "，直"
+    },
+    {
+      "col": "char_tfidf_117",
+      "ngram": "，竟"
+    },
+    {
+      "col": "char_tfidf_118",
+      "ngram": "，竟然"
+    },
+    {
+      "col": "char_tfidf_119",
+      "ngram": "，而"
+    },
+    {
+      "col": "char_tfidf_120",
+      "ngram": "，萧"
+    },
+    {
+      "col": "char_tfidf_121",
+      "ngram": "，萧炎"
+    },
+    {
+      "col": "char_tfidf_122",
+      "ngram": "，这"
+    },
+    {
+      "col": "char_tfidf_123",
+      "ngram": "，那"
+    },
+    {
+      "col": "char_tfidf_124",
+      "ngram": "，都"
+    },
+    {
+      "col": "char_tfidf_125",
+      "ngram": "，都是"
+    },
+    {
+      "col": "char_tfidf_126",
+      "ngram": "：“"
+    },
+    {
+      "col": "char_tfidf_127",
+      "ngram": "？！"
+    }
+  ],
+  "word_tfidf": [
+    {
+      "col": "word_tfidf_0",
+      "token": "\n"
+    },
+    {
+      "col": "word_tfidf_1",
+      "token": "\n::\n"
+    },
+    {
+      "col": "word_tfidf_2",
+      "token": "\n:: "
+    },
+    {
+      "col": "word_tfidf_3",
+      "token": "\n::“"
+    },
+    {
+      "col": "word_tfidf_4",
+      "token": "\n::　"
+    },
+    {
+      "col": "word_tfidf_5",
+      "token": " "
+    },
+    {
+      "col": "word_tfidf_6",
+      "token": "“"
+    },
+    {
+      "col": "word_tfidf_7",
+      "token": "”"
+    },
+    {
+      "col": "word_tfidf_8",
+      "token": "”::\n"
+    },
+    {
+      "col": "word_tfidf_9",
+      "token": "…"
+    },
+    {
+      "col": "word_tfidf_10",
+      "token": "…::…"
+    },
+    {
+      "col": "word_tfidf_11",
+      "token": "　"
+    },
+    {
+      "col": "word_tfidf_12",
+      "token": "　::“"
+    },
+    {
+      "col": "word_tfidf_13",
+      "token": "　::　"
+    },
+    {
+      "col": "word_tfidf_14",
+      "token": "。"
+    },
+    {
+      "col": "word_tfidf_15",
+      "token": "。::\n"
+    },
+    {
+      "col": "word_tfidf_16",
+      "token": "。::”"
+    },
+    {
+      "col": "word_tfidf_17",
+      "token": "一道"
+    },
+    {
+      "col": "word_tfidf_18",
+      "token": "上"
+    },
+    {
+      "col": "word_tfidf_19",
+      "token": "下"
+    },
+    {
+      "col": "word_tfidf_20",
+      "token": "不"
+    },
+    {
+      "col": "word_tfidf_21",
+      "token": "不过"
+    },
+    {
+      "col": "word_tfidf_22",
+      "token": "与"
+    },
+    {
+      "col": "word_tfidf_23",
+      "token": "中"
+    },
+    {
+      "col": "word_tfidf_24",
+      "token": "中::，"
+    },
+    {
+      "col": "word_tfidf_25",
+      "token": "之上"
+    },
+    {
+      "col": "word_tfidf_26",
+      "token": "之中"
+    },
+    {
+      "col": "word_tfidf_27",
+      "token": "也"
+    },
+    {
+      "col": "word_tfidf_28",
+      "token": "也::是"
+    },
+    {
+      "col": "word_tfidf_29",
+      "token": "了"
+    },
+    {
+      "col": "word_tfidf_30",
+      "token": "人"
+    },
+    {
+      "col": "word_tfidf_31",
+      "token": "他"
+    },
+    {
+      "col": "word_tfidf_32",
+      "token": "他::的"
+    },
+    {
+      "col": "word_tfidf_33",
+      "token": "他们"
+    },
+    {
+      "col": "word_tfidf_34",
+      "token": "但"
+    },
+    {
+      "col": "word_tfidf_35",
+      "token": "你"
+    },
+    {
+      "col": "word_tfidf_36",
+      "token": "便是"
+    },
+    {
+      "col": "word_tfidf_37",
+      "token": "其"
+    },
+    {
+      "col": "word_tfidf_38",
+      "token": "出"
+    },
+    {
+      "col": "word_tfidf_39",
+      "token": "出来"
+    },
+    {
+      "col": "word_tfidf_40",
+      "token": "出现"
+    },
+    {
+      "col": "word_tfidf_41",
+      "token": "到"
+    },
+    {
+      "col": "word_tfidf_42",
+      "token": "却是"
+    },
+    {
+      "col": "word_tfidf_43",
+      "token": "周元"
+    },
+    {
+      "col": "word_tfidf_44",
+      "token": "在"
+    },
+    {
+      "col": "word_tfidf_45",
+      "token": "在::那"
+    },
+    {
+      "col": "word_tfidf_46",
+      "token": "将"
+    },
+    {
+      "col": "word_tfidf_47",
+      "token": "就"
+    },
+    {
+      "col": "word_tfidf_48",
+      "token": "得"
+    },
+    {
+      "col": "word_tfidf_49",
+      "token": "是"
+    },
+    {
+      "col": "word_tfidf_50",
+      "token": "是::在"
+    },
+    {
+      "col": "word_tfidf_51",
+      "token": "有"
+    },
+    {
+      "col": "word_tfidf_52",
+      "token": "有些"
+    },
+    {
+      "col": "word_tfidf_53",
+      "token": "有着"
+    },
+    {
+      "col": "word_tfidf_54",
+      "token": "望"
+    },
+    {
+      "col": "word_tfidf_55",
+      "token": "望::着"
+    },
+    {
+      "col": "word_tfidf_56",
+      "token": "李洛"
+    },
+    {
+      "col": "word_tfidf_57",
+      "token": "林动"
+    },
+    {
+      "col": "word_tfidf_58",
+      "token": "此时"
+    },
+    {
+      "col": "word_tfidf_59",
+      "token": "没有"
+    },
+    {
+      "col": "word_tfidf_60",
+      "token": "然后"
+    },
+    {
+      "col": "word_tfidf_61",
+      "token": "牧尘"
+    },
+    {
+      "col": "word_tfidf_62",
+      "token": "的"
+    },
+    {
+      "col": "word_tfidf_63",
+      "token": "目光"
+    },
+    {
+      "col": "word_tfidf_64",
+      "token": "直接"
+    },
+    {
+      "col": "word_tfidf_65",
+      "token": "着"
+    },
+    {
+      "col": "word_tfidf_66",
+      "token": "竟然"
+    },
+    {
+      "col": "word_tfidf_67",
+      "token": "而"
+    },
+    {
+      "col": "word_tfidf_68",
+      "token": "能够"
+    },
+    {
+      "col": "word_tfidf_69",
+      "token": "般的"
+    },
+    {
+      "col": "word_tfidf_70",
+      "token": "萧炎"
+    },
+    {
+      "col": "word_tfidf_71",
+      "token": "被"
+    },
+    {
+      "col": "word_tfidf_72",
+      "token": "让"
+    },
+    {
+      "col": "word_tfidf_73",
+      "token": "起来"
+    },
+    {
+      "col": "word_tfidf_74",
+      "token": "身体"
+    },
+    {
+      "col": "word_tfidf_75",
+      "token": "这"
+    },
+    {
+      "col": "word_tfidf_76",
+      "token": "这种"
+    },
+    {
+      "col": "word_tfidf_77",
+      "token": "道"
+    },
+    {
+      "col": "word_tfidf_78",
+      "token": "那"
+    },
+    {
+      "col": "word_tfidf_79",
+      "token": "都"
+    },
+    {
+      "col": "word_tfidf_80",
+      "token": "都::是"
+    },
+    {
+      "col": "word_tfidf_81",
+      "token": "间"
+    },
+    {
+      "col": "word_tfidf_82",
+      "token": "！"
+    },
+    {
+      "col": "word_tfidf_83",
+      "token": "！::\n"
+    },
+    {
+      "col": "word_tfidf_84",
+      "token": "！::”"
+    },
+    {
+      "col": "word_tfidf_85",
+      "token": "，"
+    },
+    {
+      "col": "word_tfidf_86",
+      "token": "，::也"
+    },
+    {
+      "col": "word_tfidf_87",
+      "token": "，::他"
+    },
+    {
+      "col": "word_tfidf_88",
+      "token": "，::但"
+    },
+    {
+      "col": "word_tfidf_89",
+      "token": "，::便是"
+    },
+    {
+      "col": "word_tfidf_90",
+      "token": "，::在"
+    },
+    {
+      "col": "word_tfidf_91",
+      "token": "，::然后"
+    },
+    {
+      "col": "word_tfidf_92",
+      "token": "，::萧炎"
+    },
+    {
+      "col": "word_tfidf_93",
+      "token": "，::那"
+    },
+    {
+      "col": "word_tfidf_94",
+      "token": "，::都"
+    },
+    {
+      "col": "word_tfidf_95",
+      "token": "？"
+    }
+  ],
+  "svd_topics": {
+    "n_components": 32,
+    "explained_variance_ratio_sum": 0.6680886938720356
+  }
+}
