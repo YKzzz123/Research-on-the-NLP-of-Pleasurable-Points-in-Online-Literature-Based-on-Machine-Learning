@@ -27,8 +27,16 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from plot_utils import configure_matplotlib, save_figure
 
 TRY2 = Path(__file__).resolve().parent
+BOOK_FEATURE_MAP = {
+    "book_万相": "book_Wanxiang",
+    "book_元尊": "book_YuanZun",
+    "book_大主宰": "book_TheGreatRuler",
+    "book_斗破": "book_BattleThroughTheHeavens",
+    "book_武动": "book_MartialUniverse",
+}
 
 # 导出「精简训练集」时保留的特征个数（可调）
 TOP_K = 80
@@ -43,12 +51,8 @@ def main() -> None:
     import matplotlib.pyplot as plt
     import seaborn as sns
 
-    plt.rcParams["font.sans-serif"] = [
-        "Microsoft YaHei",
-        "SimHei",
-        "DejaVu Sans",
-    ]
-    plt.rcParams["axes.unicode_minus"] = False
+    chosen_font = configure_matplotlib()
+    sns.set_theme(style="whitegrid", font=chosen_font)
     from sklearn.feature_selection import f_classif, mutual_info_classif
 
     train_path = TRY2 / "NLP_Feature_train.csv"
@@ -96,6 +100,9 @@ def main() -> None:
         if hi - lo < 1e-12:
             return np.zeros_like(a)
         return (a - lo) / (hi - lo)
+
+    def _display_feature_name(name: str) -> str:
+        return BOOK_FEATURE_MAP.get(str(name), str(name))
 
     rank_mi = _minmax(mi)
     rank_corr = _minmax(corr_abs)
@@ -152,40 +159,61 @@ def main() -> None:
 
     # 图1：与标签 |相关| 最高的 20 个特征
     top20 = scores_df.nlargest(20, "abs_corr_with_label")
-    plt.figure(figsize=(10, 6))
+    top20_plot = top20.assign(feature_display=top20["feature"].map(_display_feature_name))
+    fig, ax = plt.subplots(figsize=(12.5, 7.8))
     sns.barplot(
-        data=top20,
-        y="feature",
+        data=top20_plot,
+        y="feature_display",
         x="corr_with_label",
         hue="corr_with_label",
         palette="vlag",
         legend=False,
+        ax=ax,
     )
-    plt.axvline(0, color="gray", linewidth=0.8)
-    plt.title("与 label_tag 的 Pearson 相关（Top 20 绝对值）")
-    plt.tight_layout()
-    plt.savefig(TRY2 / "corr_label_top_features.png", dpi=150)
-    plt.close()
+    ax.axvline(0, color="gray", linewidth=0.8)
+    ax.set_title("Pearson Correlation with label_tag (Top 20 by Absolute Value)", pad=14)
+    ax.set_xlabel("corr_with_label")
+    ax.set_ylabel("feature")
+    ax.tick_params(axis="y", labelsize=9)
+    save_figure(
+        fig,
+        TRY2 / "corr_label_top_features.png",
+        dpi=150,
+        left=0.30,
+        right=0.98,
+        top=0.92,
+        bottom=0.10,
+    )
 
     # 图2：与标签相关最高的前 25 个特征之间的相关热力图
     n_hm = min(25, len(feature_names))
     top_for_hm = scores_df.nlargest(n_hm, "abs_corr_with_label")["feature"].tolist()
+    top_for_hm_display = [_display_feature_name(name) for name in top_for_hm]
     idx = [feature_names.index(c) for c in top_for_hm]
     sub_R = np.corrcoef(X[:, idx].T)
-    plt.figure(figsize=(11, 9))
+    fig, ax = plt.subplots(figsize=(15, 12.5))
     sns.heatmap(
         sub_R,
-        xticklabels=top_for_hm,
-        yticklabels=top_for_hm,
+        xticklabels=top_for_hm_display,
+        yticklabels=top_for_hm_display,
         cmap="RdBu_r",
         center=0,
         square=True,
         linewidths=0.2,
+        ax=ax,
     )
-    plt.title("与标签相关性 Top 特征之间的 Pearson 相关矩阵")
-    plt.tight_layout()
-    plt.savefig(TRY2 / "corr_feature_heatmap_top.png", dpi=150)
-    plt.close()
+    ax.set_title("Pearson Correlation Matrix of Top Label-Related Features", pad=14)
+    ax.tick_params(axis="x", labelrotation=45, labelsize=8)
+    ax.tick_params(axis="y", labelrotation=0, labelsize=8)
+    save_figure(
+        fig,
+        TRY2 / "corr_feature_heatmap_top.png",
+        dpi=150,
+        left=0.24,
+        right=0.98,
+        top=0.93,
+        bottom=0.20,
+    )
 
     print(
         f"已写入：\n"

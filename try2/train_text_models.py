@@ -8,6 +8,8 @@ import time
 from pathlib import Path
 
 import joblib
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -28,20 +30,15 @@ from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold, train_t
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.utils.class_weight import compute_sample_weight
 from sklearn.svm import SVC
+from plot_utils import configure_matplotlib, save_figure
 from text_features_common import zh_word_unigram_bigram
-
-try:
-    from xgboost import XGBClassifier
-
-    HAS_XGBOOST = True
-except Exception:
-    HAS_XGBOOST = False
 
 BASE = Path(__file__).resolve().parent
 ART = BASE / "artifacts"
 ART.mkdir(exist_ok=True)
 FIG = BASE / "figures"
 FIG.mkdir(exist_ok=True)
+configure_matplotlib()
 
 
 def build_features_train_valid(x_train: list[str], x_valid: list[str]):
@@ -167,39 +164,14 @@ def train_and_tune_models(
 
 def train_extra_models(
     x_tr_sparse,
-    x_tr_dense,
     y_tr: np.ndarray,
     sample_weight: np.ndarray,
-    quick_mode: bool,
 ) -> dict:
     models: dict[str, object] = {}
     print("[3.5/6] 训练额外代表模型：MultinomialNB")
     nb = MultinomialNB(alpha=0.8)
     nb.fit(x_tr_sparse, y_tr, sample_weight=sample_weight)
     models["nb"] = nb
-
-    if HAS_XGBOOST:
-        print("[3.6/6] 训练额外代表模型：XGBoost")
-        xgb = XGBClassifier(
-            objective="multi:softprob",
-            num_class=len(np.unique(y_tr)),
-            eval_metric="mlogloss",
-            n_estimators=120 if quick_mode else 220,
-            max_depth=5,
-            learning_rate=0.08,
-            subsample=0.85,
-            colsample_bytree=0.85,
-            reg_lambda=1.0,
-            random_state=42,
-            n_jobs=-1,
-        )
-        # 标签当前为 1/2，XGB 内部用 0-based
-        y_tr_xgb = y_tr - 1
-        xgb.fit(x_tr_dense, y_tr_xgb, sample_weight=sample_weight)
-        models["xgb"] = xgb
-    else:
-        print("[3.6/6] 未检测到 xgboost，跳过 XGBoost 训练")
-
     return models
 
 
@@ -229,16 +201,14 @@ def save_training_figures(
     y_pred: np.ndarray,
     cls_report_df: pd.DataFrame,
 ) -> None:
-    plt.figure(figsize=(6, 4))
-    class_counts.plot(kind="bar", color=["#4C78A8", "#F58518"])
-    plt.title("Class Distribution (merged.csv)")
-    plt.xlabel("tag")
-    plt.ylabel("count")
-    plt.tight_layout()
-    plt.savefig(FIG / "class_distribution.png", dpi=160)
-    plt.close()
+    fig, ax = plt.subplots(figsize=(6.8, 4.6))
+    class_counts.plot(kind="bar", color=["#4C78A8", "#F58518"], ax=ax)
+    ax.set_title("Class Distribution (merged.csv)", pad=12)
+    ax.set_xlabel("tag")
+    ax.set_ylabel("count")
+    save_figure(fig, FIG / "class_distribution.png", dpi=160)
 
-    plt.figure(figsize=(6, 4))
+    fig, ax = plt.subplots(figsize=(7.2, 4.8))
     sns.barplot(
         data=eval_df,
         x="model",
@@ -246,35 +216,31 @@ def save_training_figures(
         hue="model",
         palette="viridis",
         legend=False,
+        ax=ax,
     )
-    plt.ylim(0, 1)
-    plt.title("Model F1-macro Comparison")
-    plt.tight_layout()
-    plt.savefig(FIG / "model_f1_comparison.png", dpi=160)
-    plt.close()
+    ax.set_ylim(0, 1)
+    ax.set_title("Model F1-macro Comparison", pad=12)
+    ax.tick_params(axis="x", labelrotation=12)
+    save_figure(fig, FIG / "model_f1_comparison.png", dpi=160)
 
     cm = pd.crosstab(
         pd.Series(y_true, name="True"),
         pd.Series(y_pred, name="Pred"),
         dropna=False,
     )
-    plt.figure(figsize=(5, 4))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
-    plt.title("Confusion Matrix (weighted voting)")
-    plt.tight_layout()
-    plt.savefig(FIG / "confusion_matrix_weighted_voting.png", dpi=160)
-    plt.close()
+    fig, ax = plt.subplots(figsize=(6.0, 4.8))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
+    ax.set_title("Confusion Matrix (weighted voting)", pad=12)
+    save_figure(fig, FIG / "confusion_matrix_weighted_voting.png", dpi=160)
 
     metric_rows = [x for x in ["1", "2", "macro avg", "weighted avg"] if x in cls_report_df.index]
     metric_cols = [x for x in ["precision", "recall", "f1-score"] if x in cls_report_df.columns]
     if metric_rows and metric_cols:
         plot_df = cls_report_df.loc[metric_rows, metric_cols]
-        plt.figure(figsize=(6.5, 4.2))
-        sns.heatmap(plot_df, annot=True, fmt=".3f", cmap="YlGnBu", vmin=0, vmax=1)
-        plt.title("Classification Metrics Overview")
-        plt.tight_layout()
-        plt.savefig(FIG / "classification_metrics_overview.png", dpi=160)
-        plt.close()
+        fig, ax = plt.subplots(figsize=(7.4, 4.8))
+        sns.heatmap(plot_df, annot=True, fmt=".3f", cmap="YlGnBu", vmin=0, vmax=1, ax=ax)
+        ax.set_title("Classification Metrics Overview", pad=12)
+        save_figure(fig, FIG / "classification_metrics_overview.png", dpi=160)
 
 
 def dataframe_to_markdown_fallback(df: pd.DataFrame, float_digits: int = 4) -> str:
@@ -356,10 +322,8 @@ def main() -> None:
     sample_weight_tr = compute_sample_weight(class_weight="balanced", y=y_tr)
     extra_models = train_extra_models(
         x_tr,
-        x_tr_dense,
         y_tr,
         sample_weight=sample_weight_tr,
-        quick_mode=args.quick,
     )
 
     svm_proba_va = svm.predict_proba(x_va)
@@ -387,20 +351,6 @@ def main() -> None:
     ]
     if "nb" in extra_models:
         eval_rows.append(evaluate("nb", extra_models["nb"], x_va, y_va))
-    if "xgb" in extra_models:
-        xgb_model = extra_models["xgb"]
-        xgb_pred = xgb_model.predict(x_va_dense) + 1
-        eval_rows.append(
-            {
-                "model": "xgb",
-                "acc": float(accuracy_score(y_va, xgb_pred)),
-                "f1_macro": float(f1_score(y_va, xgb_pred, average="macro")),
-                "balanced_acc": float(balanced_accuracy_score(y_va, xgb_pred)),
-                "recall_tag2": float(
-                    recall_score(y_va, xgb_pred, labels=[2], average="macro", zero_division=0)
-                ),
-            }
-        )
     eval_df = pd.DataFrame(eval_rows)
     eval_df.to_csv(BASE / "model_eval.csv", index=False, encoding="utf-8-sig")
     print("[5/6] 各模型验证表现：")
@@ -432,8 +382,6 @@ def main() -> None:
     joblib.dump(rf, ART / "rf_model.joblib")
     if "nb" in extra_models:
         joblib.dump(extra_models["nb"], ART / "nb_model.joblib")
-    if "xgb" in extra_models:
-        joblib.dump(extra_models["xgb"], ART / "xgb_model.joblib")
     # 保存推理所需的融合配置（demo 将按该配置进行软投票）
     fusion_config = {"w_svm": vote_w_svm, "w_rf": vote_w_rf}
     joblib.dump(fusion_config, ART / "voting_model.joblib")
@@ -452,8 +400,7 @@ def main() -> None:
         },
         "vote_weights": fusion_config,
         "enabled_models": ["svm", "rf", "weighted_voting"]
-        + (["nb"] if "nb" in extra_models else [])
-        + (["xgb"] if "xgb" in extra_models else []),
+        + (["nb"] if "nb" in extra_models else []),
         "score_calibration_preview": {
             "raw_conf_mean": float(voting_proba_va.max(axis=1).mean()),
             "calibrated_conf_mean": float(np.mean(calibrated_conf_va)),
