@@ -21,6 +21,16 @@
       "min_samples_leaf": 4,
       "max_features": 0.5,
       "max_depth": 40
+    },
+    "xgb": {
+      "subsample": 0.85,
+      "reg_lambda": 0.5,
+      "n_estimators": 260,
+      "min_child_weight": 3,
+      "max_depth": 6,
+      "learning_rate": 0.08,
+      "gamma": 0.3,
+      "colsample_bytree": 0.7
     }
   },
   "vote_weights": {
@@ -31,6 +41,12 @@
     "svm",
     "rf",
     "weighted_voting",
-    "nb"
-  ]
+    "nb",
+    "xgb"
+  ],
+  "score_mode": "calibrated_vote_confidence",
+  "score_calibration_preview": {
+    "raw_conf_mean": 0.8378621220024934,
+    "calibrated_conf_mean": 0.877777777777778
+  }
 }

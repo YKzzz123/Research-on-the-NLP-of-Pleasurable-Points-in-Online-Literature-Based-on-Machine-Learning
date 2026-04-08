@@ -16,6 +16,7 @@ from scipy import sparse
 from scipy.stats import loguniform
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.isotonic import IsotonicRegression
 from sklearn.metrics import (
     accuracy_score,
     balanced_accuracy_score,
@@ -76,6 +77,15 @@ def pick_unknown_threshold(y_true: np.ndarray, proba: np.ndarray) -> float:
         return 0.6
     # 保守一点：正确样本置信度的 10% 分位
     return float(np.quantile(ok, 0.10))
+
+
+def fit_confidence_calibrator(y_true: np.ndarray, proba: np.ndarray) -> IsotonicRegression:
+    conf = proba.max(axis=1)
+    pred = proba.argmax(axis=1) + 1
+    is_correct = (pred == y_true).astype(float)
+    calibrator = IsotonicRegression(y_min=0.0, y_max=1.0, out_of_bounds="clip")
+    calibrator.fit(conf, is_correct)
+    return calibrator
 
 
 def evaluate(name: str, model, x, y):
@@ -397,6 +407,8 @@ def main() -> None:
     print(eval_df.to_string(index=False))
 
     unknown_threshold = pick_unknown_threshold(y_va, voting_proba_va)
+    score_calibrator = fit_confidence_calibrator(y_va, voting_proba_va)
+    calibrated_conf_va = score_calibrator.predict(voting_proba_va.max(axis=1))
 
     report = classification_report(y_va, voting_pred_va, digits=4)
     with (BASE / "model_eval_report.txt").open("w", encoding="utf-8") as f:
@@ -425,10 +437,12 @@ def main() -> None:
     # 保存推理所需的融合配置（demo 将按该配置进行软投票）
     fusion_config = {"w_svm": vote_w_svm, "w_rf": vote_w_rf}
     joblib.dump(fusion_config, ART / "voting_model.joblib")
+    joblib.dump(score_calibrator, ART / "score_calibrator.joblib")
 
     meta = {
         "labels": {"1": "tag1", "2": "tag2", "0": "none"},
         "unknown_threshold": unknown_threshold,
+        "score_mode": "calibrated_vote_confidence",
         "n_train": int(len(y_tr)),
         "n_valid": int(len(y_va)),
         "class_distribution_full": {str(int(k)): int(v) for k, v in class_counts.items()},
@@ -440,6 +454,10 @@ def main() -> None:
         "enabled_models": ["svm", "rf", "weighted_voting"]
         + (["nb"] if "nb" in extra_models else [])
         + (["xgb"] if "xgb" in extra_models else []),
+        "score_calibration_preview": {
+            "raw_conf_mean": float(voting_proba_va.max(axis=1).mean()),
+            "calibrated_conf_mean": float(np.mean(calibrated_conf_va)),
+        },
     }
     with (ART / "meta.json").open("w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
