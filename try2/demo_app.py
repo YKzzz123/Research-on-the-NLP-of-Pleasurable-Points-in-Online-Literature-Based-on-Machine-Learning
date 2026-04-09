@@ -14,8 +14,9 @@ import streamlit as st
 from scipy import sparse
 from text_features_common import zh_word_unigram_bigram
 
-BASE = Path(__file__).resolve().parent
-ART = BASE / "artifacts"
+from paths import ARTIFACTS, EVALUATION, TRY2 as BASE
+
+ART = ARTIFACTS
 LABEL_NAME = {
     "tag1": "优越感 (Superiority)",
     "tag2": "占有感 (Acquisition Satisfaction)",
@@ -193,7 +194,7 @@ def load_artifacts(_signature: tuple[tuple[str, int], ...]):
 
 
 def load_model_scores():
-    p = BASE / "model_eval.csv"
+    p = EVALUATION / "model_eval.csv"
     if not p.exists():
         return None
     try:

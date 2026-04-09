@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import argparse
 import time
-from pathlib import Path
 
 import joblib
 import matplotlib
@@ -33,11 +32,14 @@ from sklearn.svm import SVC
 from plot_utils import configure_matplotlib, save_figure
 from text_features_common import zh_word_unigram_bigram
 
-BASE = Path(__file__).resolve().parent
-ART = BASE / "artifacts"
+from paths import ARTIFACTS, CV_RESULTS, EVALUATION, PROCESSED, TRAINING_FIGURES
+
+ART = ARTIFACTS
 ART.mkdir(exist_ok=True)
-FIG = BASE / "figures"
-FIG.mkdir(exist_ok=True)
+FIG = TRAINING_FIGURES
+FIG.mkdir(parents=True, exist_ok=True)
+CV_RESULTS.mkdir(parents=True, exist_ok=True)
+EVALUATION.mkdir(parents=True, exist_ok=True)
 configure_matplotlib()
 
 
@@ -288,7 +290,7 @@ def main() -> None:
         f"[0/6] 调参配置: svm_iter={svm_iter}, rf_iter={rf_iter}, cv={cv_splits}"
     )
     print("[1/6] 读取 merged.csv 并检查样本分布")
-    df = pd.read_csv(BASE / "merged.csv", encoding="utf-8-sig")
+    df = pd.read_csv(PROCESSED / "merged.csv", encoding="utf-8-sig")
     texts = df["paragragh"].astype(str).tolist()
     y = df["tag"].astype(int).values
     class_counts = pd.Series(y).value_counts().sort_index()
@@ -352,7 +354,7 @@ def main() -> None:
     if "nb" in extra_models:
         eval_rows.append(evaluate("nb", extra_models["nb"], x_va, y_va))
     eval_df = pd.DataFrame(eval_rows)
-    eval_df.to_csv(BASE / "model_eval.csv", index=False, encoding="utf-8-sig")
+    eval_df.to_csv(EVALUATION / "model_eval.csv", index=False, encoding="utf-8-sig")
     print("[5/6] 各模型验证表现：")
     print(eval_df.to_string(index=False))
 
@@ -361,15 +363,15 @@ def main() -> None:
     calibrated_conf_va = score_calibrator.predict(voting_proba_va.max(axis=1))
 
     report = classification_report(y_va, voting_pred_va, digits=4)
-    with (BASE / "model_eval_report.txt").open("w", encoding="utf-8") as f:
+    with (EVALUATION / "model_eval_report.txt").open("w", encoding="utf-8") as f:
         f.write(report)
     print("[5/6] Classification report:")
     print(report)
 
     cls_report_dict = classification_report(y_va, voting_pred_va, output_dict=True, digits=4)
     cls_report_df = pd.DataFrame(cls_report_dict).T
-    cls_report_df.to_csv(BASE / "classification_report_table.csv", encoding="utf-8-sig")
-    with (BASE / "classification_report_table.md").open("w", encoding="utf-8") as f:
+    cls_report_df.to_csv(EVALUATION / "classification_report_table.csv", encoding="utf-8-sig")
+    with (EVALUATION / "classification_report_table.md").open("w", encoding="utf-8") as f:
         f.write("# Classification Report Table\n\n")
         try:
             f.write(cls_report_df.to_markdown())
@@ -411,13 +413,13 @@ def main() -> None:
 
     save_training_figures(class_counts, eval_df, y_va, voting_pred_va, cls_report_df)
     eval_df.sort_values("f1_macro", ascending=False).to_csv(
-        BASE / "model_eval_sorted.csv", index=False, encoding="utf-8-sig"
+        EVALUATION / "model_eval_sorted.csv", index=False, encoding="utf-8-sig"
     )
     pd.DataFrame(svm_search.cv_results_).to_csv(
-        BASE / "svm_cv_results.csv", index=False, encoding="utf-8-sig"
+        CV_RESULTS / "svm_cv_results.csv", index=False, encoding="utf-8-sig"
     )
     pd.DataFrame(rf_search.cv_results_).to_csv(
-        BASE / "rf_cv_results.csv", index=False, encoding="utf-8-sig"
+        CV_RESULTS / "rf_cv_results.csv", index=False, encoding="utf-8-sig"
     )
 
     elapsed = time.time() - t0

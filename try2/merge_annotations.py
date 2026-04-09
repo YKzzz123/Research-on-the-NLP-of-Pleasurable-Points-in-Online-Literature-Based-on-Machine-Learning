@@ -12,7 +12,8 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
-TRY2 = Path(__file__).resolve().parent
+from paths import ANNOTATIONS_CSV, PROCESSED, RAW_ANNOTATIONS, TRY2
+
 ROOT = TRY2.parent
 
 RAW = {
@@ -200,7 +201,7 @@ def write_csv(path: Path, rows: list[tuple[str, str, int]], book_name: str) -> N
 def process_dazhuzai() -> list[tuple[str, str, int]]:
     text = read_text(RAW["dazhuzai"])
     chapters = split_by_chapters(text)
-    wb = load_workbook(TRY2 / "dazhuzai_ann.xlsx", read_only=True)
+    wb = load_workbook(RAW_ANNOTATIONS / "dazhuzai_ann.xlsx", read_only=True)
     ws = wb.active
     out: list[tuple[str, str, int]] = []
     for i, row in enumerate(ws.iter_rows(values_only=True)):
@@ -223,7 +224,7 @@ def process_dazhuzai() -> list[tuple[str, str, int]]:
 def process_yuanzun() -> list[tuple[str, str, int]]:
     text = read_text(RAW["yuanzun"])
     cmap = build_yuanzun_chapter_map(text)
-    wb = load_workbook(TRY2 / "yuanzun_ann.xlsx", read_only=True)
+    wb = load_workbook(RAW_ANNOTATIONS / "yuanzun_ann.xlsx", read_only=True)
     ws = wb.active
     out: list[tuple[str, str, int]] = []
     for i, row in enumerate(ws.iter_rows(values_only=True)):
@@ -253,7 +254,7 @@ def process_yuanzun() -> list[tuple[str, str, int]]:
 def process_doupo() -> list[tuple[str, str, int]]:
     text = read_text(RAW["doupo"])
     chapters = split_by_chapters(text)
-    wb = load_workbook(TRY2 / "doupo_ann.xlsx", read_only=True)
+    wb = load_workbook(RAW_ANNOTATIONS / "doupo_ann.xlsx", read_only=True)
     ws = wb.active
     out: list[tuple[str, str, int]] = []
     for i, row in enumerate(ws.iter_rows(values_only=True)):
@@ -277,7 +278,7 @@ def process_doupo() -> list[tuple[str, str, int]]:
 
 
 def process_wanxiang() -> list[tuple[str, str, int]]:
-    wb = load_workbook(TRY2 / "wanxiang_ann.xlsx", read_only=True)
+    wb = load_workbook(RAW_ANNOTATIONS / "wanxiang_ann.xlsx", read_only=True)
     ws = wb.active
     out: list[tuple[str, str, int]] = []
     for i, row in enumerate(ws.iter_rows(values_only=True)):
@@ -298,7 +299,7 @@ def process_wanxiang() -> list[tuple[str, str, int]]:
 def process_wudong_xls() -> list[tuple[str, str, int]]:
     import xlrd
 
-    book = xlrd.open_workbook(str(TRY2 / "wdqk.xls"))
+    book = xlrd.open_workbook(str(RAW_ANNOTATIONS / "wdqk.xls"))
     sh = book.sheet_by_index(0)
     out: list[tuple[str, str, int]] = []
     for r in range(1, sh.nrows):
@@ -313,6 +314,8 @@ def process_wudong_xls() -> list[tuple[str, str, int]]:
 
 
 def main() -> None:
+    ANNOTATIONS_CSV.mkdir(parents=True, exist_ok=True)
+    PROCESSED.mkdir(parents=True, exist_ok=True)
     # 各书处理并写 CSV
     bundles = [
         ("dazhuzai_ann.csv", process_dazhuzai, "大主宰"),
@@ -326,10 +329,10 @@ def main() -> None:
 
     for csv_name, fn, book_name in bundles:
         rows = fn()
-        write_csv(TRY2 / csv_name, rows, book_name)
+        write_csv(ANNOTATIONS_CSV / csv_name, rows, book_name)
         merged.extend([(book_name, ch, para, tag) for ch, para, tag in rows])
 
-    merged_path = TRY2 / "merged.csv"
+    merged_path = PROCESSED / "merged.csv"
     with merged_path.open("w", encoding="utf-8-sig", newline="") as f:
         w = csv.writer(f)
         w.writerow(["book", "chapter", "paragragh", "tag"])

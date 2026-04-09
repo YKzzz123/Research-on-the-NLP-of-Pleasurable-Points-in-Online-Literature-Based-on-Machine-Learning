@@ -8,13 +8,9 @@
   - ANOVA F 值与 p 值（f_classif）
   - 特征间高相关对（|r|>阈值，提示冗余）
 
-输出（均在 try2/）：
-  - feature_scores.csv
-  - feature_redundancy_pairs.csv
-  - selected_feature_list.json
-  - NLP_Feature_train_selected.csv（综合得分 Top-K 特征 + label_tag）
-  - corr_label_top_features.png（与标签相关性最高的若干特征柱状图）
-  - corr_feature_heatmap_top.png（特征间相关热力图，Top 子集）
+输出：
+  - outputs/feature_selection/：feature_scores.csv、冗余对与相关图
+  - data/features/：selected_feature_list.json、NLP_Feature_train_selected.csv
 
 运行：
   conda activate comp5572
@@ -23,13 +19,11 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 from plot_utils import configure_matplotlib, save_figure
 
-TRY2 = Path(__file__).resolve().parent
+from paths import FEATURES, FEATURE_SELECTION
 BOOK_FEATURE_MAP = {
     "book_万相": "book_Wanxiang",
     "book_元尊": "book_YuanZun",
@@ -55,7 +49,8 @@ def main() -> None:
     sns.set_theme(style="whitegrid", font=chosen_font)
     from sklearn.feature_selection import f_classif, mutual_info_classif
 
-    train_path = TRY2 / "NLP_Feature_train.csv"
+    FEATURE_SELECTION.mkdir(parents=True, exist_ok=True)
+    train_path = FEATURES / "NLP_Feature_train.csv"
     if not train_path.exists():
         raise FileNotFoundError(f"请先运行 build_nlp_features.py 生成 {train_path}")
 
@@ -113,7 +108,7 @@ def main() -> None:
         drop=True
     )
 
-    scores_path = TRY2 / "feature_scores.csv"
+    scores_path = FEATURE_SELECTION / "feature_scores.csv"
     scores_df.to_csv(scores_path, index=False, encoding="utf-8-sig")
 
     # 特征间 Pearson 相关矩阵（仅用于找冗余对）
@@ -139,7 +134,7 @@ def main() -> None:
         red_df = red_df.assign(_abs=np.abs(red_df["corr_ij"])).sort_values(
             "_abs", ascending=False
         ).drop(columns=["_abs"])
-    red_path = TRY2 / "feature_redundancy_pairs.csv"
+    red_path = FEATURE_SELECTION / "feature_redundancy_pairs.csv"
     red_df.to_csv(red_path, index=False, encoding="utf-8-sig")
 
     # 取 Top-K（按 combined）
@@ -150,11 +145,11 @@ def main() -> None:
         "redundancy_threshold": REDUNDANCY_THRESHOLD,
         "features": top_features,
     }
-    with (TRY2 / "selected_feature_list.json").open("w", encoding="utf-8") as f:
+    with (FEATURES / "selected_feature_list.json").open("w", encoding="utf-8") as f:
         json.dump(selected_json, f, ensure_ascii=False, indent=2)
 
     sub = df[top_features + ["label_tag"]]
-    sub_path = TRY2 / "NLP_Feature_train_selected.csv"
+    sub_path = FEATURES / "NLP_Feature_train_selected.csv"
     sub.to_csv(sub_path, index=False, encoding="utf-8-sig")
 
     # 图1：与标签 |相关| 最高的 20 个特征
@@ -177,7 +172,7 @@ def main() -> None:
     ax.tick_params(axis="y", labelsize=9)
     save_figure(
         fig,
-        TRY2 / "corr_label_top_features.png",
+        FEATURE_SELECTION / "corr_label_top_features.png",
         dpi=150,
         left=0.30,
         right=0.98,
@@ -207,7 +202,7 @@ def main() -> None:
     ax.tick_params(axis="y", labelrotation=0, labelsize=8)
     save_figure(
         fig,
-        TRY2 / "corr_feature_heatmap_top.png",
+        FEATURE_SELECTION / "corr_feature_heatmap_top.png",
         dpi=150,
         left=0.24,
         right=0.98,

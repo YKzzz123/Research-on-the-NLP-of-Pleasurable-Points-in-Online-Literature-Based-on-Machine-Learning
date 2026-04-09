@@ -16,8 +16,9 @@ from sklearn.preprocessing import StandardScaler
 
 from plot_utils import configure_matplotlib, save_figure
 
-TRY2 = Path(__file__).resolve().parent
-OUT = TRY2 / "dataset_visualizations"
+from paths import DATASET_VISUALIZATIONS, FEATURES, PROCESSED
+
+OUT = DATASET_VISUALIZATIONS
 RAW_OUT = OUT / "merged"
 SEL_OUT = OUT / "selected_features"
 BOOK_NAME_MAP = {
@@ -30,9 +31,9 @@ BOOK_NAME_MAP = {
 
 
 def ensure_dirs() -> None:
-    OUT.mkdir(exist_ok=True)
-    RAW_OUT.mkdir(exist_ok=True)
-    SEL_OUT.mkdir(exist_ok=True)
+    OUT.mkdir(parents=True, exist_ok=True)
+    RAW_OUT.mkdir(parents=True, exist_ok=True)
+    SEL_OUT.mkdir(parents=True, exist_ok=True)
 
 
 def split_sents(text: str) -> list[str]:
@@ -48,7 +49,7 @@ def save_plot(fig, path: Path, *, left: float | None = None, bottom: float | Non
 
 
 def visualize_merged() -> list[str]:
-    df = pd.read_csv(TRY2 / "merged.csv", encoding="utf-8-sig")
+    df = pd.read_csv(PROCESSED / "merged.csv", encoding="utf-8-sig")
     df["paragragh"] = df["paragragh"].astype(str)
     df["char_len"] = df["paragragh"].str.len()
     df["n_sentences"] = df["paragragh"].apply(lambda x: max(len(split_sents(x)), 1))
@@ -139,7 +140,7 @@ def visualize_merged() -> list[str]:
 
 
 def visualize_selected_features() -> list[str]:
-    df = pd.read_csv(TRY2 / "NLP_Feature_train_selected.csv", encoding="utf-8-sig")
+    df = pd.read_csv(FEATURES / "NLP_Feature_train_selected.csv", encoding="utf-8-sig")
     df["label_tag"] = df["label_tag"].astype(int)
     feature_cols = [c for c in df.columns if c != "label_tag"]
     outputs: list[str] = []

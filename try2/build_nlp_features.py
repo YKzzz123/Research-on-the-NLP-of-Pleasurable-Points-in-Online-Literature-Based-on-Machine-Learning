@@ -15,12 +15,12 @@
 
 训练示例（随机森林）：
   import pandas as pd
-  df = pd.read_csv("try2/NLP_Feature_train.csv", encoding="utf-8-sig")
+  df = pd.read_csv("try2/data/features/NLP_Feature_train.csv", encoding="utf-8-sig")
   y = df["label_tag"].astype(int)
   X = df.drop(columns=["label_tag"])
 
 训练示例（线性 SVM，建议用缩放矩阵）：
-  df = pd.read_csv("try2/NLP_Feature_train_scaled.csv", encoding="utf-8-sig")
+  df = pd.read_csv("try2/data/features/NLP_Feature_train_scaled.csv", encoding="utf-8-sig")
   y = df["label_tag"].astype(int)
   X = df.drop(columns=["label_tag"])
 """
@@ -38,7 +38,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import StandardScaler
 from snownlp import SnowNLP
 
-TRY2 = Path(__file__).resolve().parent
+from paths import FEATURES, PROCESSED
 
 LEX_UGC = frozenset(
     "震惊 骇然 不可思议 目瞪口呆 哗然 倒吸 碾压 摧枯拉朽 狼狈 惊骇 恐怖 可怕 强悍 变态 妖孽 怪物".split()
@@ -241,7 +241,8 @@ def _open_csv_out(path: Path):
 def main() -> None:
     import csv
 
-    merged = TRY2 / "merged.csv"
+    FEATURES.mkdir(parents=True, exist_ok=True)
+    merged = PROCESSED / "merged.csv"
     rows: list[tuple[str, str, str, str]] = []
     with merged.open(encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
@@ -251,12 +252,12 @@ def main() -> None:
     tags = [t for _, _, _, t in rows]
     feat_dict, vocab_meta, ordered_keys = build_features(texts, tags)
 
-    vocab_path = TRY2 / "NLP_Feature_vocab.json"
+    vocab_path = FEATURES / "NLP_Feature_vocab.json"
     with vocab_path.open("w", encoding="utf-8") as f:
         json.dump(vocab_meta, f, ensure_ascii=False, indent=2)
 
     # ---------- 完整表（含章节名）----------
-    out_path = TRY2 / "NLP_Feature_Matrix.csv"
+    out_path = FEATURES / "NLP_Feature_Matrix.csv"
     colnames = ["idx", "book", "chapter"] + ordered_keys + ["label_tag"]
     path_written, f_out = _open_csv_out(out_path)
     with f_out as f:
@@ -283,7 +284,7 @@ def main() -> None:
         + ordered_keys
         + ["label_tag"]
     )
-    train_path = TRY2 / "NLP_Feature_train.csv"
+    train_path = FEATURES / "NLP_Feature_train.csv"
     path_train, f_train = _open_csv_out(train_path)
     with f_train as f:
         w = csv.writer(f)
@@ -302,7 +303,7 @@ def main() -> None:
     )
     X_scaled = np.hstack([ohe, X_feat_scaled])
 
-    scaled_path = TRY2 / "NLP_Feature_train_scaled.csv"
+    scaled_path = FEATURES / "NLP_Feature_train_scaled.csv"
     path_scaled, f_scaled = _open_csv_out(scaled_path)
     with f_scaled as f:
         w = csv.writer(f)
@@ -319,7 +320,7 @@ def main() -> None:
         "n_features_X": len(train_cols) - 1,
         "note": "NLP_Feature_train.csv 未缩放，适合 RandomForest；NLP_Feature_train_scaled.csv 已 StandardScaler，适合线性 SVM。",
     }
-    with (TRY2 / "NLP_Feature_train_columns.json").open(
+    with (FEATURES / "NLP_Feature_train_columns.json").open(
         "w", encoding="utf-8"
     ) as f:
         json.dump(meta_cols, f, ensure_ascii=False, indent=2)
